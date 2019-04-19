@@ -1,0 +1,64 @@
+$grey: #444;
+$red: #d63434;
+$green: #50a12a;
+$blue: #2e85be;
+$yellow: #ebc137;
+$purple: #c952bf;
+
+$primary: $blue;
+
+$sidenav-bg: #f3f3f3;
+
+.text-white {
+    color: #fff;
+}
+
+.text-red {
+    color: $red;
+}
+
+.text-green {
+    color: $green;
+}
+
+.text-blue {
+    color: $blue;
+}
+
+.text-yellow {
+    color: $yellow;
+}
+
+.text-grey {
+    color: $grey;
+}
+
+.text-purple {
+    color: $purple;
+}
+
+////////
+
+.bg-red {
+    background-color: $red;
+}
+
+.bg-green {
+    background-color: $green;
+}
+
+.bg-blue {
+    background-color: $blue;
+}
+
+.bg-yellow {
+    background-color: $yellow;
+}
+
+.bg-grey {
+    background-color: $grey;
+}
+
+.bg-purple {
+    background-color: $purple;
+}

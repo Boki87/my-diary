@@ -1,0 +1,37 @@
+.mx-auto {
+    margin: 0px auto;
+}
+
+.max-w-300 {
+    width: 500px;
+    @media (max-width: $desktop) {
+        max-width: 300px;
+    }
+}
+
+.slideInMenu {
+    position: fixed;
+    top: 52px;
+    left: 0px;
+    width: 300px;
+    height: calc(100vh - 52px);
+    transition: left 0.4s ease;
+}
+
+.mainContent {
+    position: fixed;
+    width: calc(100% - 300px);
+    height: calc(100vh - 52px);
+    left: 300px;
+    top: 52px;
+    transition: left 0.4s, width 0.4s ease;
+}
+
+.hide-sidemenu {
+    left: -300px;
+}
+
+.main-content-left {
+    left: 0px;
+    width: 100%;
+}

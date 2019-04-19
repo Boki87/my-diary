@@ -1,29 +1,30 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div style="width:100%;">
+    <app-navbar v-if="$route.name != 'login'" @toggle="menuToggled = !menuToggled"></app-navbar>
+    <app-sidemenu :menuToggled="menuToggled" v-if="$route.name != 'login'"></app-sidemenu>
+    <app-main-content :menuToggled="menuToggled"></app-main-content>
   </div>
 </template>
+<script>
+import NavBar from "@/components/NavBar";
+import SideMenu from "@/components/SideMenu";
+import MainContent from "@/components/MainContent";
+export default {
+  components: {
+    "app-navbar": NavBar,
+    "app-sidemenu": SideMenu,
+    "app-main-content": MainContent
+  },
+
+  data() {
+    return {
+      menuToggled: false
+    };
+  }
+};
+</script>
 
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
+@import "https://use.fontawesome.com/releases/v5.8.1/css/all.css";
+@import "./assets/css/Animate.css";
 </style>
