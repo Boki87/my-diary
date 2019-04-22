@@ -29,6 +29,7 @@ export default {
       form: "login" //'register
     };
   },
+
   components: {
     "login-form": FormLogin,
     "register-form": FormRegister

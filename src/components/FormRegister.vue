@@ -1,34 +1,53 @@
 <template>
-  <form class="shadow-2 box">
+  <form @submit.prevent="register" class="shadow-2 box">
     <div class="field">
       <label class="label">Email</label>
       <div class="control has-icons-left">
-        <input class="input outline-primary" type="email" placeholder="john.doe@mail.com">
+        <input
+          v-model="email"
+          class="input outline-primary"
+          type="email"
+          placeholder="john.doe@mail.com"
+          required
+        >
         <span class="icon is-small is-left">
           <i class="fas fa-envelope"></i>
         </span>
       </div>
-      <p v-if="error" class="help">This email is invalid</p>
     </div>
 
     <div class="field">
       <label class="label">Password</label>
       <div class="control">
-        <input class="input" type="password" placeholder="abc123">
+        <input
+          v-model="password"
+          @keyup="passwordCheck"
+          class="input"
+          type="password"
+          placeholder="abc123"
+          required
+        >
       </div>
-      <p v-if="error" class="help">This email is invalid</p>
     </div>
 
     <div class="field">
       <label class="label">Confirm password</label>
       <div class="control">
-        <input class="input" type="password" placeholder="abc123">
+        <input
+          v-model="confirmPassword"
+          @keyup="passwordCheck"
+          class="input"
+          :class="{'is-danger':comparePasswordsError}"
+          type="password"
+          placeholder="abc123"
+          required
+        >
       </div>
-      <p v-if="error" class="help">This email is invalid</p>
+      <p v-if="comparePasswordsError" class="help is-danger">Passwords dont match</p>
     </div>
 
     <div class="field has-text-centered">
-      <span class="button is-info">Register</span>
+      <button type="submit" class="button is-info" :class="{'is-loading': loading}">Register</button>
     </div>
     <div class="field has-text-centered">
       <span class="has-text-grey">
@@ -39,17 +58,66 @@
   </form>
 </template>
 <script>
+import firebase from "firebase";
 export default {
   data() {
     return {
       email: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
+      comparePasswordsError: false
     };
   },
   computed: {
+    loading() {
+      return this.$store.getters.loading;
+    },
+
+    user() {
+      return this.$store.getters.user;
+    },
+
     error() {
-      return false;
+      return this.$store.getters.error;
+    }
+  },
+  watch: {
+    user(val) {
+      if (val) {
+        this.$router.push("/overview");
+      }
+    }
+  },
+  methods: {
+    passwordCheck() {
+      if (this.password != this.confirmPassword && this.confirmPassword != "") {
+        this.comparePasswordsError = true;
+      } else {
+        this.comparePasswordsError = false;
+      }
+    },
+    register() {
+      if (!this.comparePasswordsError) {
+        this.$store.dispatch("setLoading", true);
+        firebase
+          .auth()
+          .createUserWithEmailAndPassword(this.email, this.password)
+          .then(data => {
+            var userPayload = {
+              uid: data.user.uid,
+              email: data.user.email
+            };
+
+            this.$store.dispatch("setUser", userPayload);
+            this.$store.dispatch("setLoading", false);
+          })
+          .catch(error => {
+            console.log(error);
+            this.$store.dispatch("setLoading", false);
+          });
+      } else {
+        this.componentError = "Passwords dont match";
+      }
     }
   }
 };

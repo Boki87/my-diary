@@ -20,10 +20,6 @@ export default {
     return {
       menuToggled: false
     };
-  },
-
-  mounted() {
-    console.log(this.$route.name);
   }
 };
 </script>

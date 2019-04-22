@@ -1,53 +1,151 @@
 <template>
-  <form class="shadow-2 box">
+  <form @submit.prevent class="shadow-2 box">
     <div class="field">
       <label class="label">Email</label>
       <div class="control has-icons-left">
-        <input class="input outline-primary" type="email" placeholder="john.doe@mail.com">
+        <input
+          v-model="email"
+          class="input outline-primary"
+          :class="{'is-danger':emailError}"
+          type="email"
+          placeholder="john.doe@mail.com"
+          required
+        >
         <span class="icon is-small is-left">
           <i class="fas fa-envelope"></i>
         </span>
       </div>
-      <p v-if="error" class="help">This email is invalid</p>
+      <p v-if="emailError" class="help is-danger">This email is invalid</p>
     </div>
 
     <div class="field">
       <label class="label">Password</label>
       <div class="control">
-        <input class="input" type="password" placeholder="abc123">
+        <input
+          v-model="password"
+          class="input"
+          :class="{'is-danger':passError}"
+          type="password"
+          placeholder="abc123"
+          required
+        >
       </div>
-      <p v-if="error" class="help">This email is invalid</p>
+      <p v-if="passError" class="help is-danger">This password is invalid</p>
     </div>
 
     <div class="field has-text-centered">
-      <span class="button is-info">Login</span>
+      <button
+        @click="emailLogin"
+        type="submit"
+        class="button is-info"
+        :class="{'is-loading': loading}"
+      >Login</button>
     </div>
     <div class="field has-text-centered">
       <span class="has-text-grey">
-        Dont have en account?
+        Dont have an account?
         <a @click.prevent="$emit('setForm', 'register')">Register here.</a>
       </span>
       <br>
-      <span class="has-text-grey">Or login with Google:</span>
+      <span class="has-text-grey">Or login with Google</span>
     </div>
     <div class="field">
-      <span class="social-login shadow-1">
+      <span @click="googleLogin" class="social-login shadow-1">
         <img src="../assets/google-logo.png" alt>
       </span>
     </div>
   </form>
 </template>
 <script>
+import firebase from "firebase";
 export default {
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
+      emailError: null,
+      passError: null
     };
   },
   computed: {
+    loading() {
+      return this.$store.getters.loading;
+    },
+
+    user() {
+      return this.$store.getters.user;
+    },
+
     error() {
-      return false;
+      return this.$store.getters.error;
+    }
+  },
+  watch: {
+    user(val) {
+      if (val) {
+        this.$router.push("/overview");
+      }
+    }
+  },
+  methods: {
+    googleLogin() {
+      this.$store.dispatch("setError", null);
+      const provider = new firebase.auth.GoogleAuthProvider();
+
+      this.$store.dispatch("setLoading", true);
+      console.log(1111);
+
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(res => {
+          this.$store.dispatch("setLoading", false);
+
+          const userPayload = {
+            uid: res.user.uid,
+            email: res.user.email
+          };
+          console.log(userPayload);
+
+          this.$store.dispatch("setUser", userPayload);
+        })
+        .catch(err => {
+          this.$store.dispatch("setError", "Server error");
+          this.$store.dispatch("setLoading", false);
+        });
+    },
+
+    emailLogin() {
+      console.log(this.email);
+
+      this.$store.dispatch("setError", null);
+      this.$store.dispatch("setLoading", true);
+      //clear errors here
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(data => {
+          this.$store.dispatch("setLoading", false);
+
+          const userPayload = {
+            uid: data.user.uid,
+            email: data.user.email
+          };
+
+          this.$store.dispatch("setUser", userPayload);
+        })
+        .catch(error => {
+          console.log(error);
+          if (error.code == "auth/user-not-found") {
+            this.emailError = true;
+          } else if (error.code == "auth/wrong-password") {
+            this.passError = true;
+          }
+
+          // this.$store.dispatch("setError", error.message);
+          this.$store.dispatch("setLoading", false);
+          //set errors here
+        });
     }
   }
 };
