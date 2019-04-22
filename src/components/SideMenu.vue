@@ -18,6 +18,7 @@
     ></menu-item>
 
     <new-diary-modal :showModal="newDiaryModal" @close="newDiaryModal = false"></new-diary-modal>
+    <del-diary-modal :showModal="delDiaryModal" @close="delDiaryModal = false"></del-diary-modal>
 
     <div class="addDiaryBtn" @click="newDiaryModal = true">
       <i class="fas fa-plus"></i>
@@ -27,12 +28,14 @@
 <script>
 import MenuItem from "@/components/MenuItem";
 import NewDiaryModal from "@/components/NewDiaryModal";
+import DelDiaryModal from "@/components/DelDiaryModal";
 export default {
   name: "sideMenu",
   props: ["menuToggled"],
   components: {
     "menu-item": MenuItem,
-    NewDiaryModal: NewDiaryModal
+    NewDiaryModal: NewDiaryModal,
+    DelDiaryModal: DelDiaryModal
   },
   computed: {
     loading() {
@@ -88,7 +91,7 @@ export default {
     },
 
     delDiary(id) {
-      console.log(id);
+      this.delDiaryModal = true;
     }
   },
   mounted() {

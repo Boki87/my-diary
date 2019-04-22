@@ -93,7 +93,6 @@ export default {
       const provider = new firebase.auth.GoogleAuthProvider();
 
       this.$store.dispatch("setLoading", true);
-      console.log(1111);
 
       firebase
         .auth()
