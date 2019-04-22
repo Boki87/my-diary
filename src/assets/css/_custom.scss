@@ -4,6 +4,7 @@
 
 .max-w-300 {
     width: 500px;
+
     @media (max-width: $desktop) {
         max-width: 300px;
     }
@@ -34,4 +35,11 @@
 .main-content-left {
     left: 0px;
     width: 100%;
+}
+
+
+.navbar-burger {
+    @media screen and (min-width: 1088px) {
+        display: block
+    }
 }

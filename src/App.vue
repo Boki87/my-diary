@@ -1,6 +1,6 @@
 <template>
   <div style="width:100%;">
-    <app-navbar v-if="$route.name != 'login'" @toggle="menuToggled = !menuToggled"></app-navbar>
+    <app-navbar v-show="$route.name != 'login'" @toggle="menuToggled = !menuToggled"></app-navbar>
     <app-sidemenu :menuToggled="menuToggled" v-if="$route.name != 'login'"></app-sidemenu>
     <app-main-content :menuToggled="menuToggled"></app-main-content>
   </div>
@@ -20,6 +20,10 @@ export default {
     return {
       menuToggled: false
     };
+  },
+
+  mounted() {
+    console.log(this.$route.name);
   }
 };
 </script>
