@@ -2,6 +2,9 @@ import Vue from "vue";
 import Router from "vue-router";
 import Login from "@/views/Login";
 import Overview from "@/views/Overview";
+import Search from "@/views/Search";
+import Diary from "@/views/Diary";
+
 import store from "@/store/store";
 
 Vue.use(Router);
@@ -27,6 +30,19 @@ export default new Router({
             path: "/overview",
             name: "overview",
             component: Overview,
+            beforeEnter: authGuard
+        },
+        {
+            path: "/search",
+            name: "search",
+            component: Search,
+            beforeEnter: authGuard
+        },
+        {
+            path: "/diary/:id",
+            name: "diary",
+            props: true,
+            component: Diary,
             beforeEnter: authGuard
         }
     ]

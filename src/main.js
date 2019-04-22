@@ -16,5 +16,16 @@ new Vue({
 
     created() {
         firebase.initializeApp(firebaseConfig);
+
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                let userPayload = {
+                    uid: user.uid,
+                    email: user.email
+                };
+
+                this.$store.dispatch("setUser", userPayload);
+            }
+        });
     }
 }).$mount("#app");

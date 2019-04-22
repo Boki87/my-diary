@@ -5,18 +5,53 @@
     </div>
   </div>
   <div v-else class="hoverMe">
-    <div class="menu-item menu-item-title">
+    <div
+      @click="activateMe"
+      class="menu-item menu-item-title"
+      :class="{'m-item-active':item.id == activeItem}"
+    >
       <span class="icon" :class="item.colorTag">
-        <i class="fas" :class="item.icon"></i>
+        <i class="fas" :class="icon"></i>
       </span>
       <span>{{ item.name }}</span>
+      <div style="float:right;" v-if="item.to != '/overview' && item.to != '/search'">
+        <span @click="$emit('editDiary', item.id)" class="icon text-blue">
+          <i class="fas fa-edit"></i>
+        </span>
+        <span @click="$emit('delDiary', item.id)" class="icon text-red">
+          <i class="fas fa-trash"></i>
+        </span>
+      </div>
     </div>
   </div>
 </template>
 <script>
 export default {
   name: "menuItem",
-  props: ["item"]
+  props: ["item", "activeItem"],
+  computed: {
+    icon() {
+      if (this.item.to != "/overview" && this.item.to != "/search") {
+        return "fa-book";
+      } else {
+        return this.item.icon;
+      }
+    },
+
+    pathTo() {
+      if (this.item.to) {
+        return this.item.to;
+      } else {
+        return `/diary/${this.item.id}`;
+      }
+    }
+  },
+  methods: {
+    activateMe() {
+      this.$router.push(this.pathTo);
+      this.$emit("setActiveItem", this.item.id);
+    }
+  }
 };
 </script>
 <style lang="scss">
@@ -25,6 +60,11 @@ export default {
   line-height: 30px;
   background: inherit;
   cursor: pointer;
+}
+
+.m-item-active {
+  background: inherit;
+  filter: brightness(85%);
 }
 
 .menu-item-subtitle {

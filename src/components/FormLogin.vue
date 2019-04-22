@@ -116,7 +116,9 @@ export default {
     },
 
     emailLogin() {
-      console.log(this.email);
+      if (this.email == "" && this.password == "") {
+        return;
+      }
 
       this.$store.dispatch("setError", null);
       this.$store.dispatch("setLoading", true);

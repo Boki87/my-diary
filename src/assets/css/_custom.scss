@@ -17,6 +17,7 @@
     width: 300px;
     height: calc(100vh - 52px);
     transition: left 0.4s ease;
+    z-index: 500;
 }
 
 .mainContent {
@@ -37,9 +38,8 @@
     width: 100%;
 }
 
-
 .navbar-burger {
     @media screen and (min-width: 1088px) {
-        display: block
+        display: block;
     }
 }
