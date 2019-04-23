@@ -10,17 +10,16 @@
         class="modal-content animated faster"
         :class="{'slideInDown':showModal, 'slideOutUp':!showModal}"
       >
-        <!-- Any other Bulma elements you want -->
         <div class="card">
-          <header class="card-header">
+          <div class="card-header">
             <p class="card-header-title">Confirm</p>
-          </header>
-          <div class="card-content">
-            <p>Sure you want to delete this form?</p>
+          </div>
+          <div class="card-content has-text-centered">
+            <p>Sure you want to delete this Diary?</p>
             <div>
-              <div class="buttons">
-                <span class="button">Yes</span>
-                <span class="button" @click="closeMe">No</span>
+              <div style="display:flex;justify-content:center;">
+                <span class="button is-outlined is-info ma-1" @click="deleteDiary">Yes</span>
+                <span class="button is-outlined is-danger ma-1" @click="closeMe">No</span>
               </div>
             </div>
           </div>
@@ -30,8 +29,6 @@
   </transition>
 </template>
 <script>
-import firebase from "firebase";
-
 export default {
   name: "DelDiaryModal",
   props: ["showModal"],
@@ -54,6 +51,11 @@ export default {
   methods: {
     closeMe() {
       this.$emit("close");
+    },
+
+    deleteDiary() {
+      this.$emit("deleteDiary");
+      this.closeMe();
     }
   }
 };

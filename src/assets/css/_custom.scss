@@ -18,6 +18,9 @@
     height: calc(100vh - 52px);
     transition: left 0.4s ease;
     z-index: 500;
+    @media (max-width: 350px) {
+        width: 100%;
+    }
 }
 
 .mainContent {
@@ -27,10 +30,16 @@
     left: 300px;
     top: 52px;
     transition: left 0.4s, width 0.4s ease;
+    @media (max-width: $desktop) {
+        width: 100%;
+    }
 }
 
 .hide-sidemenu {
     left: -300px;
+    @media (max-width: 350px) {
+        left: -100%;
+    }
 }
 
 .main-content-left {

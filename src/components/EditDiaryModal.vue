@@ -23,7 +23,7 @@
                   <div class="control">
                     <input
                       maxlength="20"
-                      v-model="newDiary.name"
+                      v-model="diaryToEdit.name"
                       class="input outline-primary"
                       :class="{'is-danger':1==2}"
                       type="text"
@@ -38,7 +38,7 @@
                   <label class="label">Color Tag:</label>
                   <div class="control">
                     <div class="select">
-                      <select v-model="newDiary.colorTag">
+                      <select v-model="diaryToEdit.colorTag">
                         <option value="text-red">Red</option>
                         <option value="text-green">Green</option>
                         <option value="text-blue" selected>Blue</option>
@@ -56,13 +56,14 @@
                     type="submit"
                     class="button is-outlined is-info"
                     :class="{'is-loading':loading}"
-                  >Add</button>
+                  >Save</button>
                 </div>
               </div>
             </form>
           </div>
         </div>
       </div>
+
       <button class="modal-close is-large" aria-label="close" @click="closeMe"></button>
     </div>
   </transition>
@@ -71,17 +72,26 @@
 import firebase from "firebase";
 
 export default {
-  name: "NewDiaryModal",
-  props: ["showModal"],
+  name: "EditDiaryModal",
+  props: ["showModal", "diaryId"],
   data() {
     return {
-      newDiary: {
+      editDiary: {
         name: "",
         colorTag: "text-blue"
       }
     };
   },
   computed: {
+    diaryToEdit() {
+      let editDiary = this.diarys.filter(d => {
+        if (d.id == this.diaryId) return d;
+      });
+
+      let diaryCopy = { ...editDiary[0] };
+
+      return diaryCopy;
+    },
     loading() {
       return this.$store.getters.loading;
     },
@@ -98,27 +108,27 @@ export default {
     }
   },
   methods: {
-    formSubmit() {
-      let diary = {
-        name: this.newDiary.name,
-        colorTag: this.newDiary.colorTag,
-        userId: this.user.uid,
-        createdAt: +new Date()
-      };
+    closeMe() {
+      this.$emit("close");
+    },
 
+    formSubmit() {
       this.$store.dispatch("setLoading", true);
       firebase
         .firestore()
         .collection("diarys")
-        .add(diary)
-        .then(docRef => {
-          let newDiary = diary;
-          newDiary.id = docRef.id;
+        .doc(this.diaryId)
+        .update(this.diaryToEdit)
+        .then(() => {
+          let diarys = [...this.diarys];
 
-          let newDiarys = [...this.diarys];
-          newDiarys.push(newDiary);
-          this.$store.dispatch("setDiarys", newDiarys);
-
+          diarys.forEach(d => {
+            if (d.id == this.diaryId) {
+              d.name = this.diaryToEdit.name;
+              d.colorTag = this.diaryToEdit.colorTag;
+            }
+          });
+          this.$store.dispatch("setDiarys", diarys);
           this.$store.dispatch("setLoading", false);
 
           this.closeMe();
@@ -126,12 +136,8 @@ export default {
         .catch(error => {
           console.log(error);
           this.$store.dispatch("setLoading", false);
+          this.closeMe();
         });
-    },
-    closeMe() {
-      this.$emit("close");
-      this.newDiary.name = "";
-      this.newDiary.colorTag = "text-blue";
     }
   }
 };

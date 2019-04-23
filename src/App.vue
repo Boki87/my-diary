@@ -1,6 +1,10 @@
 <template>
   <div style="width:100%;">
-    <app-navbar v-show="$route.name != 'login'" @toggle="menuToggled = !menuToggled"></app-navbar>
+    <app-navbar
+      v-show="$route.name != 'login'"
+      @toggle="menuToggled = !menuToggled"
+      :menuToggled="menuToggled"
+    ></app-navbar>
     <app-sidemenu :menuToggled="menuToggled" v-if="$route.name != 'login'"></app-sidemenu>
     <app-main-content :menuToggled="menuToggled"></app-main-content>
   </div>
@@ -20,6 +24,15 @@ export default {
     return {
       menuToggled: false
     };
+  },
+  mounted() {
+    window.addEventListener("resize", () => {
+      if (window.innerWidth < 1088) {
+        this.menuToggled = true;
+      } else {
+        this.menuToggled = false;
+      }
+    });
   }
 };
 </script>

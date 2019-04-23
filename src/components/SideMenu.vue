@@ -1,5 +1,6 @@
 <template>
   <div class="slideInMenu has-background-light" :class="{'hide-sidemenu':menuToggled}">
+    <img src="../assets/logo-small.png" class="is-block mx-auto mt-3 mb-3" style="height:40px;" alt>
     <menu-item
       v-for="item in menuList"
       :item="item"
@@ -13,12 +14,21 @@
       :item="item"
       :activeItem="activeItem"
       @setActiveItem="setActiveItem"
-      @editDiary="editDiary"
-      @delDiary="delDiary"
+      @editDiary="editDiaryOpen"
+      @delDiary="delDiaryOpen"
     ></menu-item>
 
     <new-diary-modal :showModal="newDiaryModal" @close="newDiaryModal = false"></new-diary-modal>
-    <del-diary-modal :showModal="delDiaryModal" @close="delDiaryModal = false"></del-diary-modal>
+    <edit-diary-modal
+      :showModal="editDiaryModal"
+      @close="editDiaryModal = false"
+      :diaryId="diaryToEdit"
+    ></edit-diary-modal>
+    <del-diary-modal
+      :showModal="delDiaryModal"
+      @close="delDiaryModal = false"
+      @deleteDiary="deleteDiary"
+    ></del-diary-modal>
 
     <div class="addDiaryBtn" @click="newDiaryModal = true">
       <i class="fas fa-plus"></i>
@@ -26,16 +36,19 @@
   </div>
 </template>
 <script>
+import firebase from "firebase";
 import MenuItem from "@/components/MenuItem";
 import NewDiaryModal from "@/components/NewDiaryModal";
 import DelDiaryModal from "@/components/DelDiaryModal";
+import EditDiaryModal from "@/components/EditDiaryModal";
 export default {
   name: "sideMenu",
   props: ["menuToggled"],
   components: {
     "menu-item": MenuItem,
     NewDiaryModal: NewDiaryModal,
-    DelDiaryModal: DelDiaryModal
+    DelDiaryModal: DelDiaryModal,
+    EditDiaryModal: EditDiaryModal
   },
   computed: {
     loading() {
@@ -59,6 +72,10 @@ export default {
       editDiaryModal: false,
       delDiaryModal: false,
       newDiaryModal: false,
+
+      diaryToDelete: null,
+      diaryToEdit: null,
+
       menuList: [
         { id: 0, name: "Overview", type: "subtitle" },
         {
@@ -86,12 +103,44 @@ export default {
       this.activeItem = id;
     },
 
-    editDiary(id) {
-      console.log(id);
+    editDiaryOpen(id) {
+      this.diaryToEdit = id;
+      this.editDiaryModal = true;
     },
 
-    delDiary(id) {
+    delDiaryOpen(id) {
+      this.diaryToDelete = id;
       this.delDiaryModal = true;
+    },
+
+    backToOverview() {
+      this.$router.push("/overview");
+      this.activeItem = 1;
+    },
+
+    deleteDiary() {
+      this.$store.dispatch("setLoading", true);
+      firebase
+        .firestore()
+        .collection("diarys")
+        .doc(this.diaryToDelete)
+        .delete()
+        .then(() => {
+          console.log("Diary deleted");
+
+          const newDiarys = this.diarys.filter(d => {
+            if (d.id != this.diaryToDelete) return d;
+          });
+
+          this.$store.dispatch("setDiarys", newDiarys);
+          this.delDiaryModalShow = false;
+          this.$store.dispatch("setLoading", false);
+          this.backToOverview();
+        })
+        .catch(error => {
+          console.log(error);
+          this.$store.dispatch("setLoading", false);
+        });
     }
   },
   mounted() {

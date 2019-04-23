@@ -7,6 +7,11 @@ import firebaseConfig from "./firebase-config";
 
 require("@/assets/css/_main.scss");
 
+import flatPickr from "vue-flatpickr-component";
+import "flatpickr/dist/flatpickr.css";
+
+Vue.component("flatPickr", flatPickr);
+
 Vue.config.productionTip = false;
 
 new Vue({
@@ -17,6 +22,7 @@ new Vue({
     created() {
         firebase.initializeApp(firebaseConfig);
 
+        this.$store.dispatch("setLoading", true);
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 let userPayload = {
@@ -25,6 +31,7 @@ new Vue({
                 };
 
                 this.$store.dispatch("setUser", userPayload);
+                this.$store.dispatch("setLoading", false);
             }
         });
     }

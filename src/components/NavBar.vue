@@ -3,7 +3,7 @@
     <a
       role="button"
       class="navbar-burger burger"
-      :class="{'is-active':burgerMenuActive}"
+      :class="{'is-active':!burgerMenuActive}"
       style="position:fixed;top:0px;left:0px;"
       aria-label="menu"
       aria-expanded="false"
@@ -32,10 +32,20 @@
 import firebase from "firebase";
 export default {
   name: "navBar",
+  props: ["menuToggled"],
   data() {
     return {
       burgerMenuActive: false
     };
+  },
+  watch: {
+    menuToggled(val) {
+      if (val) {
+        this.burgerMenuActive = true;
+      } else {
+        this.burgerMenuActive = false;
+      }
+    }
   },
   methods: {
     toggle() {

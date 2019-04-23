@@ -5,16 +5,15 @@
     </div>
   </div>
   <div v-else class="hoverMe">
-    <div
-      @click="activateMe"
-      class="menu-item menu-item-title"
-      :class="{'m-item-active':item.id == activeItem}"
-    >
-      <span class="icon" :class="item.colorTag">
-        <i class="fas" :class="icon"></i>
-      </span>
-      <span>{{ item.name }}</span>
-      <div style="float:right;" v-if="item.to != '/overview' && item.to != '/search'">
+    <div class="menu-item menu-item-title" :class="{'m-item-active':item.id == activeItem}">
+      <div @click="activateMe" style="flex:1">
+        <span class="icon" :class="item.colorTag">
+          <i class="fas" :class="icon"></i>
+        </span>
+        <span>{{ item.name }}</span>
+      </div>
+
+      <div style v-if="item.to != '/overview' && item.to != '/search'">
         <span @click="$emit('editDiary', item.id)" class="icon text-blue">
           <i class="fas fa-edit"></i>
         </span>
@@ -60,6 +59,7 @@ export default {
   line-height: 30px;
   background: inherit;
   cursor: pointer;
+  display: flex;
 }
 
 .m-item-active {

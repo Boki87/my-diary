@@ -1,58 +1,64 @@
 <template>
   <form @submit.prevent class="shadow-2 box">
-    <div class="field">
-      <label class="label">Email</label>
-      <div class="control has-icons-left">
-        <input
-          v-model="email"
-          class="input outline-primary"
-          :class="{'is-danger':emailError}"
-          type="email"
-          placeholder="john.doe@mail.com"
-          required
-        >
-        <span class="icon is-small is-left">
-          <i class="fas fa-envelope"></i>
+    <div v-if="loading" class="field has-text-centered">
+      <h4>Logging you in</h4>
+    </div>
+
+    <div v-else>
+      <div class="field">
+        <label class="label">Email</label>
+        <div class="control has-icons-left">
+          <input
+            v-model="email"
+            class="input outline-primary"
+            :class="{'is-danger':emailError}"
+            type="email"
+            placeholder="john.doe@mail.com"
+            required
+          >
+          <span class="icon is-small is-left">
+            <i class="fas fa-envelope"></i>
+          </span>
+        </div>
+        <p v-if="emailError" class="help is-danger">This email is invalid</p>
+      </div>
+
+      <div class="field">
+        <label class="label">Password</label>
+        <div class="control">
+          <input
+            v-model="password"
+            class="input"
+            :class="{'is-danger':passError}"
+            type="password"
+            placeholder="abc123"
+            required
+          >
+        </div>
+        <p v-if="passError" class="help is-danger">This password is invalid</p>
+      </div>
+
+      <div class="field has-text-centered">
+        <button
+          @click="emailLogin"
+          type="submit"
+          class="button is-info"
+          :class="{'is-loading': loading}"
+        >Login</button>
+      </div>
+      <div class="field has-text-centered">
+        <span class="has-text-grey">
+          Dont have an account?
+          <a @click.prevent="$emit('setForm', 'register')">Register here.</a>
+        </span>
+        <br>
+        <span class="has-text-grey">Or login with Google</span>
+      </div>
+      <div class="field">
+        <span @click="googleLogin" class="social-login shadow-1">
+          <img src="../assets/google-logo.png" alt>
         </span>
       </div>
-      <p v-if="emailError" class="help is-danger">This email is invalid</p>
-    </div>
-
-    <div class="field">
-      <label class="label">Password</label>
-      <div class="control">
-        <input
-          v-model="password"
-          class="input"
-          :class="{'is-danger':passError}"
-          type="password"
-          placeholder="abc123"
-          required
-        >
-      </div>
-      <p v-if="passError" class="help is-danger">This password is invalid</p>
-    </div>
-
-    <div class="field has-text-centered">
-      <button
-        @click="emailLogin"
-        type="submit"
-        class="button is-info"
-        :class="{'is-loading': loading}"
-      >Login</button>
-    </div>
-    <div class="field has-text-centered">
-      <span class="has-text-grey">
-        Dont have an account?
-        <a @click.prevent="$emit('setForm', 'register')">Register here.</a>
-      </span>
-      <br>
-      <span class="has-text-grey">Or login with Google</span>
-    </div>
-    <div class="field">
-      <span @click="googleLogin" class="social-login shadow-1">
-        <img src="../assets/google-logo.png" alt>
-      </span>
     </div>
   </form>
 </template>
