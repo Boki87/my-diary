@@ -1,26 +1,39 @@
 <template>
   <div>
-    <div class="diary-search-box">
-      <div class="diary-search-text">
-        <p class="control has-icons-left">
-          <input class="input" type="text" placeholder="Search by name">
-          <span class="icon is-small is-left">
-            <i class="fas fa-search"></i>
-          </span>
-        </p>
-      </div>
+    <template>
+      <div class="diary-search-box">
+        <div class="diary-search-text">
+          <p class="control has-icons-left">
+            <input class="input" type="text" placeholder="Search by name">
+            <span class="icon is-small is-left">
+              <i class="fas fa-search"></i>
+            </span>
+          </p>
+        </div>
 
-      <div class="diary-search-date">
-        <flat-pickr
-          :value="date"
-          @on-change="setDate"
-          :config="config"
-          placeholder="Select a date"
-          name="birthdate"
-        ></flat-pickr>
+        <div class="diary-search-date">
+          <p class="control has-icons-left">
+            <flat-pickr
+              v-model="date"
+              :config="config"
+              placeholder="Select a date"
+              name="birthdate"
+            ></flat-pickr>
+            <span class="icon is-small is-left">
+              <i class="fas fa-calendar"></i>
+            </span>
+          </p>
+        </div>
       </div>
-    </div>
-    <p>{{ datePicked}}</p>
+      <div class="columns" v-if="loading">
+        <div class="column is-4 is-offset-4">
+          <progress class="progress is-info is-3 mx-auto" max="100">30%</progress>
+        </div>
+      </div>
+      <div v-else class="diary-pages-wrapper">
+        <p>{{ pagesForDiary }}</p>
+      </div>
+    </template>
   </div>
 </template>
 <script>
@@ -30,25 +43,22 @@ export default {
   props: ["id"],
   data() {
     return {
-      datePicked: "",
+      date: new Date(),
       config: {
-        altFormat: "Y-m-d",
-        altInput: true
+        altInput: true,
+        dateFormat: "d M Y",
+        altFormat: "d M Y",
+        disableMobile: "true",
+        maxDate: new Date()
       },
       pagesForDiary: []
     };
   },
   computed: {
-    date() {
-      let dateTime = new Date();
-      let fullDate =
-        dateTime.getFullYear() +
-        "-" +
-        dateTime.getMonth() +
-        "-" +
-        dateTime.getDay();
-      return fullDate;
+    filteredPages() {
+      return this.pagesForDiary.filter(page => {});
     },
+
     loading() {
       return this.$store.getters.loading;
     },
@@ -61,17 +71,8 @@ export default {
       return this.$store.getters.error;
     }
   },
+
   methods: {
-    setDate(date) {
-      let datePicked = new Date(date);
-      let fullDate =
-        datePicked.getFullYear() +
-        "-" +
-        datePicked.getMonth() +
-        "-" +
-        datePicked.getDay();
-      this.datePicked = fullDate;
-    },
     getPagesForDiary(id) {
       this.pagesForDiary = [];
       this.$store.dispatch("setLoading", true);
@@ -109,7 +110,7 @@ export default {
       if (month.length < 2) month = "0" + month;
       if (day.length < 2) day = "0" + day;
 
-      return [year, month, day].join("-");
+      return [year, month, day].join(" ");
     }
   },
 
@@ -133,6 +134,10 @@ export default {
   width: 500px;
   margin: 30px auto;
   @media (max-width: 1088px) {
+    width: 80%;
+  }
+
+  @media (max-width: 425px) {
     width: 90%;
   }
 }
@@ -141,10 +146,15 @@ export default {
   flex: 8;
 }
 .diary-search-date {
-  flex: 3;
-  @media (max-width: 1088px) {
-    flex: 4;
+  flex: 4;
+  @media (max-width: 425px) {
+    flex: 6;
   }
+}
+
+.diary-pages-wrapper {
+  height: calc(100vh - 96px);
+  overflow: auto;
 }
 </style>
 
