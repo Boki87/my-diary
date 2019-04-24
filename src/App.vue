@@ -40,4 +40,5 @@ export default {
 <style lang="scss">
 @import "https://use.fontawesome.com/releases/v5.8.1/css/all.css";
 @import "./assets/css/Animate.css";
+@import "./assets/css/main.scss";
 </style>

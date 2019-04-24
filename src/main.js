@@ -5,7 +5,7 @@ import store from "./store/store";
 import firebase from "firebase";
 import firebaseConfig from "./firebase-config";
 
-require("@/assets/css/_main.scss");
+
 
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";

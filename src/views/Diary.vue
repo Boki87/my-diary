@@ -27,20 +27,27 @@
       </div>
       <div class="columns" v-if="loading">
         <div class="column is-4 is-offset-4">
-          <progress class="progress is-info is-3 mx-auto" max="100">30%</progress>
+          <progress class="progress is-info is-3 mx-auto" max="100"></progress>
         </div>
       </div>
       <div v-else class="diary-pages-wrapper">
-        <p>{{ pagesForDiary }}</p>
+        {{pagesForDiary}}
+
+        <diary-page v-for="page in pagesForDiary" :page="page" :key="page.id"></diary-page>
+        
       </div>
     </template>
   </div>
 </template>
 <script>
 import firebase from "firebase";
+import DiaryPage from "@/components/DiaryPage"
 export default {
   name: "diary",
   props: ["id"],
+  components: {
+    diaryPage: DiaryPage
+  },
   data() {
     return {
       date: new Date(),
@@ -154,7 +161,14 @@ export default {
 
 .diary-pages-wrapper {
   height: calc(100vh - 96px);
+  padding-bottom: 96px;
   overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-content: flex-start;
+  flex-wrap: wrap;
 }
+
+
 </style>
 
