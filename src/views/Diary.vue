@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <template>
+  <div style="position:relative">
+    
       <div class="diary-search-box">
         <div class="diary-search-text">
           <p class="control has-icons-left">
@@ -32,11 +32,14 @@
       </div>
       <div v-else class="diary-pages-wrapper">
         {{pagesForDiary}}
-
+        
         <diary-page v-for="page in pagesForDiary" :page="page" :key="page.id"></diary-page>
         
       </div>
-    </template>
+    
+      <div @click="$router.push('/page/'+id)" class="float-btn-right-bottom has-background-info has-text-white">
+        <i class="fas fa-plus"></i>
+      </div>
   </div>
 </template>
 <script>
@@ -169,6 +172,21 @@ export default {
   flex-wrap: wrap;
 }
 
-
+.float-btn-right-bottom {
+  width:50px;
+  height:50px;
+  border-radius:100%;
+  text-align: center;
+  line-height: 50px;
+  position: absolute;
+  bottom:80px;
+  right:30px;
+  z-index:2;
+  font-size:1.2rem;
+  cursor:pointer;
+  &:hover {
+    filter: brightness(90%)
+  }
+}
 </style>
 

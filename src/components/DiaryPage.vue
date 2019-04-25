@@ -48,7 +48,7 @@ export default {
 .page-thumb-open {
   cursor:pointer;
   flex:1;
-  background-color:#c2c2c2;
+  background-color:#8b8b8b;
   &:hover {
     filter: brightness(90%)
   }
@@ -56,7 +56,7 @@ export default {
 .page-thumb-delete {  
   cursor:pointer;
   flex:1;
-  background-color:#8b8b8b;
+  background-color:#c2c2c2;
   &:hover {
     filter: brightness(90%)
   }

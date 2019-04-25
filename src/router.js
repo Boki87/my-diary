@@ -4,6 +4,7 @@ import Login from "@/views/Login";
 import Overview from "@/views/Overview";
 import Search from "@/views/Search";
 import Diary from "@/views/Diary";
+import Page from "@/views/Page";
 
 import store from "@/store/store";
 
@@ -43,6 +44,13 @@ export default new Router({
             name: "diary",
             props: true,
             component: Diary,
+            beforeEnter: authGuard
+        },
+        {
+            path: "/page/:id",
+            name: "page",
+            props: true,
+            component: Page,
             beforeEnter: authGuard
         }
     ]
