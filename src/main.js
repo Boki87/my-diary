@@ -22,8 +22,12 @@ new Vue({
     created() {
         firebase.initializeApp(firebaseConfig);
 
+        
+        
         this.$store.dispatch("setLoading", true);
         firebase.auth().onAuthStateChanged(user => {
+        
+            
             if (user) {
                 let userPayload = {
                     uid: user.uid,
@@ -31,6 +35,10 @@ new Vue({
                 };
 
                 this.$store.dispatch("setUser", userPayload);
+                this.$store.dispatch("setLoading", false);
+        
+                
+            }else{
                 this.$store.dispatch("setLoading", false);
             }
         });

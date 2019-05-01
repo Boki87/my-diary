@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent class="shadow-2 box">
     <div v-if="loading" class="field has-text-centered">
-      <h4>Logging you in</h4>
+      <h4>Logging you in</h4>      
     </div>
 
     <div v-else>
@@ -25,7 +25,7 @@
 
       <div class="field">
         <label class="label">Password</label>
-        <div class="control">
+        <div class="control has-icons-left">
           <input
             v-model="password"
             class="input"
@@ -34,6 +34,9 @@
             placeholder="abc123"
             required
           >
+          <span class="icon is-small is-left">
+            <i class="fas fa-lock"></i>
+          </span>
         </div>
         <p v-if="passError" class="help is-danger">This password is invalid</p>
       </div>

@@ -170,7 +170,11 @@ export default {
 .diary-pages-wrapper {
   height: calc(100vh - 96px);
   padding-bottom: 96px;
+  @media (max-width: 425px) {
+    padding-bottom: 150px;
+  }
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   justify-content: center;
   align-content: flex-start;
@@ -185,6 +189,9 @@ export default {
   line-height: 50px;
   position: absolute;
   bottom:80px;
+  @media (max-width: 425px) {
+    bottom:150px;
+  }
   right:30px;
   z-index:2;
   font-size:1.2rem;

@@ -18,7 +18,7 @@
 
     <div class="field">
       <label class="label">Password</label>
-      <div class="control">
+      <div class="control has-icons-left">
         <input
           v-model="password"
           @keyup="passwordCheck"
@@ -27,12 +27,15 @@
           placeholder="abc123"
           required
         >
+        <span class="icon is-small is-left">
+            <i class="fas fa-lock"></i>
+          </span>
       </div>
     </div>
 
     <div class="field">
       <label class="label">Confirm password</label>
-      <div class="control">
+      <div class="control has-icons-left">
         <input
           v-model="confirmPassword"
           @keyup="passwordCheck"
@@ -42,6 +45,9 @@
           placeholder="abc123"
           required
         >
+        <span class="icon is-small is-left">
+            <i class="fas fa-lock"></i>
+          </span>
       </div>
       <p v-if="comparePasswordsError" class="help is-danger">Passwords dont match</p>
     </div>

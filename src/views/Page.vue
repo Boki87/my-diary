@@ -1,6 +1,6 @@
 <template>
 
-    <div style="padding:20px;height: calc(100vh - 51px);overflow: auto;">
+    <div style="padding:20px;height: calc(100vh - 51px);overflow: auto;-webkit-overflow-scrolling: touch;">
         <div class="columns">
             <div class="column is-8 is-offset-2">
               <div style="display:flex">
@@ -186,7 +186,7 @@
     </editor-menu-bar>
 
     <editor-content class="editor__content" :editor="editor" />
-    <div class="field has-text-centered">
+    <div class="field has-text-centered custom_form_submit">
         <button
           @click="savePage"
           type="submit"
@@ -461,5 +461,12 @@ h2 {
 
 h3 {
   font-size:1.1rem
+}
+
+.custom_form_submit {
+  margin-bottom: 60px;
+  @media (max-width: 425px) {
+    margin-bottom: 150px;
+  }
 }
 </style>
