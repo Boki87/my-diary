@@ -1,10 +1,12 @@
 <template>
     <div class="page-thumb shadow-1">
             <div class="page-thumb-title">{{ page.title }}</div>
-            <div class="page-thumb-count">{{ wordCount }} words</div>
+            <div class="page-thumb-count" v-html="wordCount">
+              
+            </div>
 
             <div class="page-thumb-footer">
-              <div class="page-thumb-open">
+              <div class="page-thumb-open" @click="$router.push('/page/'+page.id)">
                   <i class="fas fa-pencil-alt"></i>
               </div>
               <div class="page-thumb-delete">
@@ -17,9 +19,15 @@
 export default {
     name:"DiaryPage",
     props:["page"],
+    methods: {
+      strip_html_tags(str) {
+        var str = str.toString();
+        return str.replace(/<\/?[^>]+(>|$)/g, ' ');
+      }
+    },
     computed: {
         wordCount() {
-            return this.page.data.split(" ").length
+          return this.page.data
         }
     }
 }
@@ -29,9 +37,10 @@ export default {
 
 .page-thumb {
   width: 300px;
-  height:150px;
+  height:300px;
   position:relative;
   margin:10px;
+  overflow:hidden;
 }
 
 .page-thumb-footer {
@@ -64,10 +73,12 @@ export default {
 .page-thumb-title {
   font-size:1.2rem;
   padding:10px;
+  background-color: #e4e1e1;
 }
 
 .page-thumb-count {
   font-size:1rem;
   padding-left:10px;
+  
 }
 </style>

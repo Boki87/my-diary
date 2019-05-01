@@ -52,6 +52,13 @@ export default new Router({
             props: true,
             component: Page,
             beforeEnter: authGuard
+        },
+        {
+            path: "/new-page/:id",
+            name: "newPage",
+            props: true,
+            component: Page,
+            beforeEnter: authGuard
         }
     ]
 });

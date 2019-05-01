@@ -3,6 +3,7 @@ import Vuex from "vuex";
 
 import auth from "./modules/auth";
 import diarys from "./modules/diarys";
+import activePages from "./modules/diaryPages"
 
 Vue.use(Vuex);
 
@@ -38,6 +39,7 @@ export default new Vuex.Store({
 
     modules: {
         auth,
-        diarys
+        diarys,
+        activePages
     }
 });

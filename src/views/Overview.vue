@@ -1,5 +1,8 @@
 <template>
-  <div>Overview</div>
+  <div>Overview
+
+    <a href="" @click.prevent="$router.push('/page/new')">New Page</a>
+  </div>
 </template>
 <script>
 export default {};

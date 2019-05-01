@@ -10,6 +10,8 @@
     "bulma": "^0.7.4",
     "core-js": "^2.6.5",
     "firebase": "^5.10.0",
+    "tiptap": "^1.16.2",
+    "tiptap-extensions": "^1.16.2",
     "vue": "^2.6.10",
     "vue-flatpickr-component": "^8.1.2",
     "vue-router": "^3.0.3",

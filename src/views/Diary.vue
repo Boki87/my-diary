@@ -30,14 +30,13 @@
           <progress class="progress is-info is-3 mx-auto" max="100"></progress>
         </div>
       </div>
-      <div v-else class="diary-pages-wrapper">
-        {{pagesForDiary}}
+      <div v-else class="diary-pages-wrapper">        
         
-        <diary-page v-for="page in pagesForDiary" :page="page" :key="page.id"></diary-page>
+        <diary-page v-for="page in activePages" :page="page" :key="page.id"></diary-page>
         
       </div>
     
-      <div @click="$router.push('/page/'+id)" class="float-btn-right-bottom has-background-info has-text-white">
+      <div @click="$router.push('/new-page/'+id)" class="float-btn-right-bottom has-background-info has-text-white">
         <i class="fas fa-plus"></i>
       </div>
   </div>
@@ -60,13 +59,12 @@ export default {
         altFormat: "d M Y",
         disableMobile: "true",
         maxDate: new Date()
-      },
-      pagesForDiary: []
+      }
     };
   },
   computed: {
     filteredPages() {
-      return this.pagesForDiary.filter(page => {});
+      return this.activePages.filter(page => {});
     },
 
     loading() {
@@ -79,6 +77,10 @@ export default {
 
     error() {
       return this.$store.getters.error;
+    },
+
+    activePages() {
+      return this.$store.getters.activePages
     }
   },
 
@@ -101,8 +103,9 @@ export default {
             pagesFromCloud.push(page);
           });
 
-          this.pagesForDiary = pagesFromCloud;
+          // this.pagesForDiary = pagesFromCloud;
 
+          this.$store.dispatch("setActivePages", pagesFromCloud);
           this.$store.dispatch("setLoading", false);
         })
         .catch(error => {
@@ -113,14 +116,16 @@ export default {
 
     formatDate(date) {
       var d = new Date(date),
-        month = "" + (d.getMonth() + 1),
         day = "" + d.getDate(),
         year = d.getFullYear();
 
-      if (month.length < 2) month = "0" + month;
-      if (day.length < 2) day = "0" + day;
+      var monthShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-      return [year, month, day].join(" ");
+      var month = monthShortNames[d.getMonth()];
+      
+      if (day.length < 2) day = "0" + day;      
+      return [day, month, year].join(" ");
     }
   },
 
