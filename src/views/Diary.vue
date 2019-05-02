@@ -4,7 +4,7 @@
       <div class="diary-search-box">
         <div class="diary-search-text">
           <p class="control has-icons-left">
-            <input class="input" type="text" placeholder="Search by name">
+            <input v-model="filterByName" class="input" type="text" placeholder="Search by name">
             <span class="icon is-small is-left">
               <i class="fas fa-search"></i>
             </span>
@@ -32,7 +32,7 @@
       </div>
       <div v-else class="diary-pages-wrapper">        
         
-        <diary-page v-for="page in activePages" :page="page" :key="page.id"></diary-page>
+        <diary-page v-for="page in filteredPages" :page="page" :key="page.id"></diary-page>
         
       </div>
     
@@ -52,7 +52,8 @@ export default {
   },
   data() {
     return {
-      date: new Date(),
+      filterByName: '',
+      date: this.formatDate(+new Date()),
       config: {
         altInput: true,
         dateFormat: "d M Y",
@@ -64,7 +65,14 @@ export default {
   },
   computed: {
     filteredPages() {
-      return this.activePages.filter(page => {});
+      let filteredPages = []
+      this.activePages.filter(page => {
+        
+        if(page.title.toLowerCase().includes(this.filterByName.toLowerCase()) && page.date == this.date) {
+          filteredPages.push(page)
+        }
+      });
+      return filteredPages
     },
 
     loading() {
