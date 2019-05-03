@@ -9,7 +9,7 @@
               <div class="page-thumb-open" @click="$router.push('/page/'+page.id)">
                   <i class="fas fa-pencil-alt"></i>
               </div>
-              <div class="page-thumb-delete">
+              <div class="page-thumb-delete" @click="$emit('showDelPageModal')">
                   <i class="fas fa-trash-alt"></i>
               </div>
             </div>

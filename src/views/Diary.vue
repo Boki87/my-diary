@@ -32,26 +32,32 @@
       </div>
       <div v-else class="diary-pages-wrapper">        
         
-        <diary-page v-for="page in filteredPages" :page="page" :key="page.id"></diary-page>
+        <diary-page v-for="page in filteredPages" :page="page" :key="page.id" @showDelPageModal="showDelPageModal = true"></diary-page>
         
       </div>
     
       <div @click="$router.push('/new-page/'+id)" class="float-btn-right-bottom has-background-info has-text-white">
         <i class="fas fa-plus"></i>
       </div>
+
+
+      <del-page-modal :showModal="showDelPageModal" @confirm="delPage" @close="showDelPageModal = false"></del-page-modal>
   </div>
 </template>
 <script>
 import firebase from "firebase";
 import DiaryPage from "@/components/DiaryPage"
+import DelPageModal from "@/components/DelPageModal"
 export default {
   name: "diary",
   props: ["id"],
   components: {
-    diaryPage: DiaryPage
+    diaryPage: DiaryPage,
+    "del-page-modal":DelPageModal
   },
   data() {
     return {
+      showDelPageModal:false,
       filterByName: '',
       date: this.formatDate(+new Date()),
       config: {
