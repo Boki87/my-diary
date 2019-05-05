@@ -4,7 +4,7 @@
     leave-active-class="animated fadeOut faster"
     mode="in-out"
   >
-    <div v-show="showModal" class="modal is-active">
+    <div v-show="showModal" class="modal is-active" style="z-index:600;">
       <div class="modal-background"></div>
       <div
         class="modal-content animated faster"
