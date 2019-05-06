@@ -229,8 +229,8 @@ export default {
 }
 
 .diary-pages-wrapper {
-  height: calc(100vh - 96px);
-  padding-bottom: 96px;
+  height: calc(100vh - 96px - 52px);
+  // padding-bottom: 96px;
   @media (max-width: 425px) {
     padding-bottom: 150px;
   }
