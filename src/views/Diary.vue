@@ -249,9 +249,9 @@ export default {
   text-align: center;
   line-height: 50px;
   position: absolute;
-  bottom: 80px;
+  bottom: 30px;
   @media (max-width: 425px) {
-    bottom: 150px;
+    bottom: 100px;
   }
   right: 30px;
   z-index: 2;
