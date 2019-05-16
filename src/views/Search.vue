@@ -9,6 +9,7 @@
                 <i class="fas fa-search"></i>
               </span>
               <input
+              @keyup="searchFlag = true"
               v-model="searchTitle"
               class="input outline-primary"
               type="text"
@@ -23,6 +24,7 @@
               
             <p class="control has-icons-left">
               <flat-pickr
+                @keyup="searchFlag = true"
                 v-model="date"
                 :config="config"
                 placeholder="Select a date"
@@ -31,7 +33,7 @@
               <span class="icon is-small is-left">
                 <i class="fas fa-calendar"></i>
               </span>              
-              <i @click="date = null" class="fas fa-times" style="position:absolute;top:10px;right:7px;z-index:200;cursor:pointer;"></i>
+              <i @click="date = ''" class="fas fa-times" style="position:absolute;top:10px;right:7px;z-index:200;cursor:pointer;"></i>
             </p>
           </div>
         
@@ -39,16 +41,18 @@
     </div>
     <div class="diary-pages-wrapper">
       
-      <template v-if="activePages.length > 0">
+      <template v-if="activePages.length > 0">      
         <diary-page
-        v-for="page in activePages"
+        v-for="page in searchedPages"
         :page="page"
         :key="page.id"
         :subtitle="true"
         @showDelPageModal="showDelModal"
       ></diary-page>
       </template>
-      
+      <div v-if="searchedPages.length == 0 && searchFlag == true" class="has-text-centered" style="width:100%;height:100%;display:flex;align-items: center;justify-content: center;flex-direction: column;">
+        <p>No pages for this query</p>        
+      </div>
 
       <del-page-modal
       :showModal="showDelPageModal"
@@ -69,9 +73,10 @@ export default {
   name: "search",
 
   data() {
-    return {
+    return {  
+      searchFlag: false,
       searchTitle: '',
-      date: null,
+      date: '',
       config: {
         altInput: true,
         dateFormat: "d M Y",
@@ -90,6 +95,38 @@ export default {
     "new-diary-page-modal":NewDiaryPageModal
   },
   computed: {
+    searchedPages() {
+      
+      let searchedPages = []
+
+      searchedPages = this.activePages.filter(d => {          
+        
+        
+          if(this.searchTitle.length > 0 && this.date == '') {
+            
+            if(d.title.toLowerCase().includes(this.searchTitle.toLowerCase())) {
+              return d
+            }
+          }
+
+          if(this.searchTitle == '' && this.date != '') {         
+            console.log(222);
+             
+              if(d.date == this.date) {
+                return d
+              }
+          }
+
+          if(this.searchTitle != '' && this.date != '') {  
+            if(d.title.toLowerCase().includes(this.searchTitle.toLowerCase()) && d.date == this.date) {
+                return d
+              }
+          }
+        })
+        return searchedPages
+    },
+
+
     loading() {
       return this.$store.getters.loading;
     },
