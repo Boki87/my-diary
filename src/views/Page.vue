@@ -308,9 +308,7 @@ export default {
     },
 
     setContent() {
-      if (this.$route.name == "page") {
-        console.log(1111);
-
+      if (this.$route.name == "page") {        
         this.editor.setContent(this.pageData.data);
         this.pageTitle = this.pageData.title;
         this.dataHtml = this.pageData.data;

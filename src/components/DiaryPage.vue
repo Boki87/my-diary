@@ -1,7 +1,14 @@
 <template>
   <div class="page-thumb shadow-1">
-    <div class="page-thumb-title">{{ page.title }}</div>
-    <div class="page-thumb-count" v-html="wordCount"></div>
+    
+    <div class="page-thumb-title" @click="$router.push('/page/'+page.id)">
+     <span v-if="subtitle" class="icon" :class="colorTag">
+          <i class="fas fa-tag"></i>
+        </span>
+      {{ page.title }}
+      </div>
+    
+    <div class="page-thumb-count" v-html="pageData"></div>
 
     <div class="page-thumb-footer">
       <div class="page-thumb-open" @click="$router.push('/page/'+page.id)">
@@ -14,24 +21,39 @@
   </div>
 </template>
 <script>
+import { setTimeout } from 'timers';
 export default {
   name: "DiaryPage",
-  props: ["page"],
-  methods: {
-    strip_html_tags(str) {
-      var str = str.toString();
-      return str.replace(/<\/?[^>]+(>|$)/g, " ");
+  props: ["page","subtitle"],
+  data() {
+    return {
+      colorTag:'',
+      diaryName:''
     }
+    
   },
   computed: {
-    wordCount() {
-      return this.page.data;
+    diarys() {
+      return this.$store.getters.diarys;
+    },
+    pageData() {
+
+      return this.page.data;      
     }
   },
+  
   methods: {
     showDelModal() {
       this.$emit("showDelPageModal", this.page.id);
     }
+  },
+  created() {
+    this.diarys.forEach(d => {              
+         if(d.id == this.page.diaryId) {
+            this.colorTag = d.colorTag
+            this.diaryName = d.name
+        }
+      })
   }
 };
 </script>
@@ -76,6 +98,15 @@ export default {
   font-size: 1.2rem;
   padding: 10px;
   background-color: #e4e1e1;
+  cursor:pointer;
+  &:hover {
+    filter: brightness(90%);
+  }
+}
+
+.page-thumb-subTitle {
+  font-size: 0.7rem;
+  padding: 10px;
 }
 
 .page-thumb-count {
